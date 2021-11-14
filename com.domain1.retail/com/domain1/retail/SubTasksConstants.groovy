@@ -1,4 +1,4 @@
-package com.domain1.retail
+package com.domain1.subtasks
 // used by subtask project workflows
 class SubTasksConstants {
     
