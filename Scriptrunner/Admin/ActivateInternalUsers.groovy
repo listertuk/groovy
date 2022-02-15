@@ -19,10 +19,10 @@ import com.atlassian.jira.util.ErrorCollection;
 
 
 UserSearchService userSearchService = ComponentAccessor.getComponent(UserSearchService)
-def logit = Logger.getLogger("com.domain1.eu.logging")
+def logit = Logger.getLogger("com.domain1.logging")
 
 // don't change IT User's application access
-String ignoreIfInGroup = "Cheil IT UK"
+String ignoreIfInGroup = "My Local Users"
 
 def  usrService = ComponentAccessor.getComponent(UserService)
 
@@ -38,12 +38,10 @@ logit.info("size=" + userUtil.getAllApplicationUsers().size())
 for (ApplicationUser user in userUtil.getAllApplicationUsers()) {
     
         // user found, internal directory and not in ignore group and email match
-        if (user != null   && !user.active && user.directoryId == 1 && !groupManager.isUserInGroup(user, ignoreIfInGroup) && (user.emailAddress.contains("domain2") || user.emailAddress.contains("cylndr")|| user.emailAddress.contains("centrade"))) {
+        if (user != null   && !user.active && user.directoryId == 1 && !groupManager.isUserInGroup(user, ignoreIfInGroup) && (user.emailAddress.contains("domain2") || user.emailAddress.contains("domain2")|| user.emailAddress.contains("domain3"))) {
              String[] usergroups = groupManager.getGroupNamesForUser(user)
             if (usergroups.size() == 0)
-           // {     
-            //if (user.getDisplayName().contains("[Peng"))
-           //{ 
+           
             logit.info("internal:" + user.getDisplayName() + "/" + user.emailAddress + "/" + user.directoryId + "/" + usergroups.toString())
 			UserService.DeleteUserValidationResult result = usrService.validateDeleteUser(adminUser, user)
  	         //logit.info(result.getErrorCollection().getErrorMessages().isEmpty())
