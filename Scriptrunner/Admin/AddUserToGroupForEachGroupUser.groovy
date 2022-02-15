@@ -1,16 +1,22 @@
+/*
+  Used where users had been entered with wrong domain name
+  This only fixes the user groups memberships as a time saving operation
+  Take the users in source groups
+  For each member, change domain and add to source group and license group.
+*/
 import com.atlassian.jira.component.ComponentAccessor
 import org.apache.log4j.Logger
 import com.atlassian.jira.user.ApplicationUser
 import com.atlassian.crowd.embedded.api.Group
 
-def logit = Logger.getLogger("com.domain1.eu.logging")
+def logit = Logger.getLogger("com.domain1.logging")
 // the name of the  group
 // format :
 // "Source group":"license group"
 def groups = [
-    "CCAT Accounts Team":"jira-software-users",
-    "Cheil Canada Optimisation Team":"jira-software-users",
-	"Cheil Canada Optimisation Team":"jira-software-users",
+    "Accounts Team":"jira-software-users",
+    "Dev Team":"jira-software-users",
+	"QA Team":"jira-software-users",
 ]
  
 def groupManager = ComponentAccessor.groupManager
@@ -23,8 +29,8 @@ if (groupIn) {
     def license = groupManager.getGroup(it.value)
 		Collection<ApplicationUser> inUsers = groupManager.getUsersInGroup(groupIn)
     	inUsers.each(){ ApplicationUser u ->
-            if (u.username.contains("domain1eu")) {
-                def newName = u.username.replaceFirst("domain1eu.com", "domain1.com")
+            if (u.username.contains("domain1")) {
+                def newName = u.username.replaceFirst("domain1.com", "domain2.com")
                 def u2 = userManager.getUserByName(newName)
                 if(u2) {
         			logit.info("change " + u2.username + " to " + newName)
