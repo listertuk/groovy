@@ -1,3 +1,6 @@
+/*
+add listed users to each of listed groups
+*/
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.user.util.UserManager
 import com.atlassian.jira.security.groups.GroupManager
@@ -9,16 +12,16 @@ def log = Logger.getLogger("com.domain1.logging")
 
 // **********************************************
 String[] userList = [
-"m.bartosiak@domain1.com",
-"m.binkiewicz@domain1.com",
-"o.bowzyk@domain1.com",
-"m.bratukhin@domain1.com",
-"m.celuch@domain1.com"
+"m.bartos@domain1.com",
+"m.binkie@domain1.com",
+"o.bow@domain1.com",
+"m.brat@domain1.com",
+"m.cel@domain1.com"
 
 ]
 // **********************************************
 
-String[] groups = ["WPC PL"]
+String[] groups = ["My PMs"]
 ApplicationUser user
 def userUtil = ComponentAccessor.getUserUtil() 
 UserManager userManager = ComponentAccessor.getUserManager()
@@ -34,9 +37,9 @@ userList.each() {
     groups.each() {
         log.info(it)
         if (user.active) {
-            Group removeFromGroup = groupManager.getGroup((String)it)
-            userUtil.AddUserToGroup(removeFromGroup, user)
-            log.info("Added " + user.displayName + " to  " + removeFromGroup.getName())
+            Group targetGroup = groupManager.getGroup((String)it)
+            userUtil.AddUserToGroup(targetGroup, user)
+            log.info("Added " + user.displayName + " to  " + targetGroup.getName())
         }
     }
 }
