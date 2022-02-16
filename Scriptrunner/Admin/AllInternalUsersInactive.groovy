@@ -1,3 +1,8 @@
+/*
+Find all inactive internal users
+Where JSM automatically creates user , they may need to be identified and removed if issue data has been removed
+Example of accessing User Attributes
+*/
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.user.util.UserManager
 import com.atlassian.jira.security.groups.GroupManager
