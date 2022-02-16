@@ -1,4 +1,9 @@
-
+/*
+ Change the owner of a comment
+ Used to clean up after incorrect user created
+ May no longer work in latest server/DC editions
+ Example of JQL searching, iterate issues, iterate comments
+*/
 import com.atlassian.jira.issue.comments.MutableComment
 import com.atlassian.jira.issue.comments.Comment
 import com.atlassian.jira.component.ComponentAccessor
@@ -20,8 +25,8 @@ def log = Logger.getLogger("com.domain1.logging")
 // **********************************************
 
 // **********************************************
-String oldUser = "omerbarisonal@gmail.com"
-String newUser = "omer.onal@domain1.com"
+String oldUser = "omerbar@gmail.com"
+String newUser = "omer.bar@domain1.com"
 def jqlSearch = 'issueFunction in commented("by ' + oldUser + '")'
 List<Issue> issues = null
 SearchService searchService = ComponentAccessor.getComponent(SearchService.class)
