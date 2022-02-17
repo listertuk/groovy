@@ -1,36 +1,30 @@
-/*
- bulk add a list of components to a list of projects where all share same functionality
-*/
-import com.atlassian.jira.component.ComponentAccessor
-import com.atlassian.jira.bc.project.component.ProjectComponent
-import com.atlassian.jira.bc.project.component.ProjectComponentManager
+//import groovy.xml.MarkupBuilder
 
-long projectId = 0
+String[] projects = ["FA1"]
+String[] components = [
+    "Bug splatter",
+    "Cleaner"]
 
-ProjectComponentManager pComMgr = ComponentAccessor.getProjectComponentManager()
-ProjectComponent component
-def projectManager = ComponentAccessor.getProjectManager()
-
-String[] projects = ["PROJ1",
-"PROJ2",
-"PROJ3"
-]
-					 
-String[] components = ["Issue & Inquiry Only",
-"Registration",
-"Modification",
-"Update",
-"Static Page",
-"Promotion",
-"Home Page",
-"Footer"
-]
-					 
-
-projects.each() {String projectName ->
-    projectId = projectManager.getProjectByCurrentKey(projectName).getId()
-    component.each() {String componentName ->
-    component = pComMgr.create(componentName, null, null , 0, projectId)
+projects.each() {projectKey ->
+    def result = get("rest/api/3/project/" + projectKey)
+    .header('Content-Type', 'application/json')
+    .asJson()
+    
+    if (result.status == 200 ) {
+        //logger.info( result)
+         components.each() {compName ->
+    
+        def componentResponse = post('/rest/api/3/component')
+            .header('Content-Type', 'application/json')
+            .body([
+              name : compName,
+              project: projectKey
+               
+             ])
+        .asObject(Map)
+    
     }
-}
+
+
+}}
 
