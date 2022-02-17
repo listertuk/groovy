@@ -31,7 +31,7 @@ GroupManager groupManager = ComponentAccessor.getGroupManager()
 // for each user to process
 userList.each() {
     user = userManager.getUserByName((String)it)
-	
+    
     log.info("" + user + "/" + (user.active?"active":"inactive"))
     // String[] groups = userUtil.getGroupNamesForUser(user.getName())
     groups.each() {

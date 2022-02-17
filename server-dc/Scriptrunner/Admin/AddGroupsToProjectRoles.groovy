@@ -37,16 +37,16 @@ Collection<String> actorCollection = new ArrayList<>();
 actorCollection.add(group)
 
 projectNames.each() { projectName ->
-	project = pMgr.getProjectByCurrentKey((String)projectName)
-  	roleNames.each() { roleName ->             
-	role = projectRoleManager.getProjectRole((String)roleName)
-	ProjectRoleActors actors = projectRoleManager.getProjectRoleActors(role, project)
-	projectRoleService.addActorsToProjectRole(actorCollection,
-    	role,
+    project = pMgr.getProjectByCurrentKey((String)projectName)
+      roleNames.each() { roleName ->             
+    role = projectRoleManager.getProjectRole((String)roleName)
+    ProjectRoleActors actors = projectRoleManager.getProjectRoleActors(role, project)
+    projectRoleService.addActorsToProjectRole(actorCollection,
+        role,
         project,
         ProjectRoleActor.GROUP_ROLE_ACTOR_TYPE ,
         errorCollection)
-	}
+    }
     logit.info("add " + actorCollection + " to " + role + "/" + project)
 }
  

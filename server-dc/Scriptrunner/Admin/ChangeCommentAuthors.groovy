@@ -54,15 +54,15 @@ if (parseResult.isValid()) {
     log.info (issueData.key)
     comments=  commentMgr.getCommentsForUser(issueData, oldAppUser)
         log.info("comments " + comments.size())
-    	comments.each {comment ->
+        comments.each {comment ->
         if (commentMgr.isUserCommentAuthor(oldAppUser, comment)) {
-        	log.info("author: " + comment.getAuthorApplicationUser())
+            log.info("author: " + comment.getAuthorApplicationUser())
             mut=commentMgr.getMutableComment(comment.getId())
             //log.info(mut.getBody())
             
             mut.setAuthor(newAppUser)
             try {
-            	commentMgr.update(mut, true)
+                commentMgr.update(mut, true)
                
             } catch (Exception e)
             {

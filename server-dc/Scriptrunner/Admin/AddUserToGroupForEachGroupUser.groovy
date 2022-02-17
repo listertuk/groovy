@@ -16,7 +16,7 @@ def logit = Logger.getLogger("com.domain1.logging")
 def groups = [
     "Accounts Team":"jira-software-users",
     "Dev Team":"jira-software-users",
-	"QA Team":"jira-software-users",
+    "QA Team":"jira-software-users",
 ]
  
 def groupManager = ComponentAccessor.groupManager
@@ -25,20 +25,20 @@ def userManager = ComponentAccessor.getUserManager()
 groups.each(){
 Group groupIn = groupManager.getGroup(it.key)
 if (groupIn) {
-	logit.info("source : " + groupIn.name)
+    logit.info("source : " + groupIn.name)
     def license = groupManager.getGroup(it.value)
-		Collection<ApplicationUser> inUsers = groupManager.getUsersInGroup(groupIn)
-    	inUsers.each(){ ApplicationUser u ->
+        Collection<ApplicationUser> inUsers = groupManager.getUsersInGroup(groupIn)
+        inUsers.each(){ ApplicationUser u ->
             if (u.username.contains("domain1")) {
                 def newName = u.username.replaceFirst("domain1.com", "domain2.com")
                 def u2 = userManager.getUserByName(newName)
                 if(u2) {
-        			logit.info("change " + u2.username + " to " + newName)
-       				groupManager.addUserToGroup(u2, groupIn)
-       				groupManager.addUserToGroup(u2, license)
+                    logit.info("change " + u2.username + " to " + newName)
+                       groupManager.addUserToGroup(u2, groupIn)
+                       groupManager.addUserToGroup(u2, license)
                 }
-    		}	
-		}
-	}
+            }    
+        }
+    }
 }
     

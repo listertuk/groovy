@@ -17,12 +17,12 @@ def projectManager = ComponentAccessor.getProjectManager()
 String[] projects = ["PROJ1",
 "PROJ2"
 ]
-					 
+                     
 String[] components = ["Home Page",
 "Footer",
 "Static Page"
 ]
-					 
+                     
 
 projects.each() {String projectName ->
      projectId = projectManager.getProjectByCurrentKey(projectName).getId()
