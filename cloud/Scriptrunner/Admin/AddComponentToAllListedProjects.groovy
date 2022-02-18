@@ -8,7 +8,7 @@ projects.each() {projectKey ->
     .header('Content-Type', 'application/json')
     .asJson()
 
-    if (result.status == 200 ) {
+    assert result.status == 200  
         //logger.info( result)
         components.each() { compName ->
             def componentResponse = post('/rest/api/3/component')
@@ -19,4 +19,4 @@ projects.each() {projectKey ->
              ])
             .asObject(Map)
         }
-}}
+}

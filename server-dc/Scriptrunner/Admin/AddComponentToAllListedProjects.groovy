@@ -1,5 +1,8 @@
 /*
  bulk add a list of components to a list of projects where all share same functionality
+ Cloud Equivalent:
+ https://github.com/listertuk/groovy/blob/b8116dff8c72e1e2001b3f7249b235ebbb5cb3b0/cloud/Scriptrunner/Admin/AddComponentToAllListedProjects.groovy
+ 
 */
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.bc.project.component.ProjectComponent
@@ -15,7 +18,7 @@ String[] projects = ["PROJ1",
 "PROJ2",
 "PROJ3"
 ]
-					 
+                     
 String[] components = ["Issue & Inquiry Only",
 "Registration",
 "Modification",
@@ -25,7 +28,7 @@ String[] components = ["Issue & Inquiry Only",
 "Home Page",
 "Footer"
 ]
-					 
+                     
 
 projects.each() {String projectName ->
     projectId = projectManager.getProjectByCurrentKey(projectName).getId()

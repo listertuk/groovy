@@ -1,5 +1,9 @@
 /*
 add listed components to listed projects
+Cloud equivalent:
+https://github.com/listertuk/groovy/blob/b8116dff8c72e1e2001b3f7249b235ebbb5cb3b0/cloud/Scriptrunner/Admin/AddComponentToAllListedProjects.groovy
+ 
+
 */
 import com.atlassian.jira.component.ComponentAccessor
 import com.atlassian.jira.bc.project.component.ProjectComponent
