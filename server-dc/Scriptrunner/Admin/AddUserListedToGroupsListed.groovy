@@ -1,45 +1,42 @@
-/*
-add listed users to each of listed groups
-*/
-import com.atlassian.jira.component.ComponentAccessor
-import com.atlassian.jira.user.util.UserManager
-import com.atlassian.jira.security.groups.GroupManager
-import com.atlassian.crowd.embedded.api.Group
-import com.atlassian.jira.user.ApplicationUser
-import org.apache.log4j.Logger
- 
-def log = Logger.getLogger("com.domain1.logging")
-
-// **********************************************
 String[] userList = [
-"m.bartos@domain1.com",
-"m.binkie@domain1.com",
-"o.bow@domain1.com",
-"m.brat@domain1.com",
-"m.cel@domain1.com"
+    //"557058%3Aebde908e-e998-4fcb-8c8d-7d0076732fa4",
+    "listertuk@gmail.com"//,
+    //"Tom%20Lister"
+    /*
+    "bartos@domain1.com",
+    "binkie@domain1.com",
+    "bow@domain1.com",
+    "brat@domain1.com",
+    "cel@domain1.com"
+    */
 
 ]
-// **********************************************
+String[] groups = ["My%20PMs"]
 
-String[] groups = ["My PMs"]
-ApplicationUser user
-def userUtil = ComponentAccessor.getUserUtil() 
-UserManager userManager = ComponentAccessor.getUserManager()
-GroupManager groupManager = ComponentAccessor.getGroupManager()
-
-
-// for each user to process
-userList.each() {
-    user = userManager.getUserByName((String)it)
+userList.each() {user ->
+    def result2 = get('/rest/api/3/user/search?query=' + user)
+    .header('Content-Type', 'application/json')
+    .asObject(List)
     
-    log.info("" + user + "/" + (user.active?"active":"inactive"))
-    // String[] groups = userUtil.getGroupNamesForUser(user.getName())
-    groups.each() {
-        log.info(it)
-        if (user.active) {
-            Group targetGroup = groupManager.getGroup((String)it)
-            userUtil.AddUserToGroup(targetGroup, user)
-            log.info("Added " + user.displayName + " to  " + targetGroup.getName())
+    assert result2.status == 200
+    
+    logger.info(user + " result2: " + result2.body)
+    result2.body.each() { userId ->
+        String accountId = userId.accountId
+        logger.info("accountId " + accountId)
+        groups.each() {groupname ->
+        String groupsUrl = "/rest/api/3/group/user?groupname=${groupname}"
+        logger.info('url: ' + groupname + ' = ' + groupsUrl)
+       
+            def result3 = post(groupsUrl)
+            .header('Content-Type', 'application/json')
+            .body([
+                accountId: accountId
+            ])
+            .asString()
+
+            assert result2.status == 200
+        
         }
     }
 }
