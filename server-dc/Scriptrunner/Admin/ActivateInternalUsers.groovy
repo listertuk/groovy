@@ -43,15 +43,15 @@ for (ApplicationUser user in userUtil.getAllApplicationUsers()) {
             if (usergroups.size() == 0)
            
             logit.info("internal:" + user.getDisplayName() + "/" + user.emailAddress + "/" + user.directoryId + "/" + usergroups.toString())
-			UserService.DeleteUserValidationResult result = usrService.validateDeleteUser(adminUser, user)
- 	         //logit.info(result.getErrorCollection().getErrorMessages().isEmpty())
+            UserService.DeleteUserValidationResult result = usrService.validateDeleteUser(adminUser, user)
+              //logit.info(result.getErrorCollection().getErrorMessages().isEmpty())
             if (result.getErrorCollection().getErrorMessages().isEmpty())
             {
                //--- logit.info( user.emailAddress + "/" + user.directoryId + "/" + usergroups.toString())
             }
             //  if delete errors the user has links to issues so set active
             else {
-            	logit.info(result.getErrorCollection().getErrorMessages())
+                logit.info(result.getErrorCollection().getErrorMessages())
                 ApplicationUserBuilder applicationUserBuilder = usrService.newUserBuilder(user);
                 applicationUserBuilder.active(true);
 
