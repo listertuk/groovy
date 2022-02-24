@@ -116,7 +116,7 @@ def searchResult
     def grps = groupManager.getGroupsForUser(oldU)
     grps.each() {
         if (adduser) {
-            if (!it.getName().contains("COMP_") && !it.getName().contains("ORG_") && !it.getName().contains("FnSec_")) {
+            if (!it.getName().contains("EXCEPTION GROUP") ) {
 				userUtil.removeUserFromGroup(it, oldU)
 	        	groupManager.addUserToGroup(newU, it)
             }

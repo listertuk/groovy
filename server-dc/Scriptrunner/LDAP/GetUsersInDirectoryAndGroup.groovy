@@ -10,9 +10,9 @@ import com.atlassian.jira.bc.user.UserService;
 import com.atlassian.jira.util.ErrorCollection;
 import com.atlassian.crowd.embedded.api.UserWithAttributes
 import com.atlassian.crowd.embedded.api.CrowdService
-def logit = Logger.getLogger("com.domain1.eu.logging")
+def logit = Logger.getLogger("com.domain1.logging")
 import com.atlassian.crowd.manager.directory.DirectoryManager
-final directoryToCheck = 'Cheilworldwide LDAP'
+final directoryToCheck = 'Company LDAP'
 final groupName = 'jira-software-users'
 def groupManager = ComponentAccessor.groupManager
 def userManager = ComponentAccessor.userManager
@@ -29,8 +29,6 @@ def usersBelongToGroup = allDirectoryUsers?.findAll { groupManager.isUserInGroup
 
 logit.info("users " + usersBelongToGroup.size())
 
-//def userUtil = ComponentAccessor.getUserUtil()
-//CrowdService crowdService = ComponentAccessor.crowdService
 
 logit.info("Username, First Name, Last Name, Email Address")
 int count
@@ -39,7 +37,7 @@ int count2
 for (ApplicationUser user in usersBelongToGroup) {
     def groups = groupManager.getGroupNamesForUser(user)
     groups.each() {String grp ->
-        if (!grp.startsWith("COMP") && !grp.startsWith("ORG") && !grp.startsWith("Fn")) {
+        if (!grp.startsWith("EXCEPTION GROUP") ) {
              logit.info(user.getUsername() + "," + grp)
         }
        // if (grp.name.)

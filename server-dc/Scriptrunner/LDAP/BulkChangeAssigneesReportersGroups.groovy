@@ -17,7 +17,7 @@ import com.atlassian.jira.bc.issue.IssueService.IssueResult
 import com.onresolve.scriptrunner.parameters.annotation.Checkbox
 
 
-def logit = Logger.getLogger("com.domain1.eu.logging")
+def logit = Logger.getLogger("com.domain1.logging")
 @Checkbox(label = "Make changes", description = "Check to apply changes, Uncheck to preview changes")
 boolean apply
 String mode = (apply && apply == true)?"Apply":"Preview"
@@ -27,10 +27,10 @@ String mode = (apply && apply == true)?"Apply":"Preview"
 // key : value
 // old : new
 def users = [
-"e.viss@domain2.com":"e.viss@domain1.com",
-"a.zwada@domain2.com":"a.zwada@domain1.com",
-"a.zwolak@domain2.com":"a.zwolak@domain1.com",
-"j.kowalski@domain2.com":"j.kowalski@domain1.com"
+"viss@domain2.com":"viss@domain1.com",
+"zwada@domain2.com":"zwada@domain1.com",
+"zwolak@domain2.com":"zwolak@domain1.com",
+"kowalski@domain2.com":"kowalski@domain1.com"
 ]
 String oldUser
 String newUser
@@ -69,59 +69,59 @@ users.each() {
     logit.info( "" + jqlSearch)
     SearchService.ParseResult parseResult =  searchService.parseQuery(user, jqlSearch)
     if (parseResult.isValid()) {
-    	searchResult = searchService.search(user, parseResult.getQuery(), PagerFilter.getUnlimitedFilter())
+        searchResult = searchService.search(user, parseResult.getQuery(), PagerFilter.getUnlimitedFilter())
         StringBuffer sBuf1 = new StringBuffer()
-    	searchResult.getResults().each { issue ->
+        searchResult.getResults().each { issue ->
            sBuf1.append(issue.getKey() + ", ")
            def issueInputParameters = issueService.newIssueInputParameters()
             issueInputParameters.setSkipScreenCheck(true);
             issueInputParameters.setAssigneeId(newUser)
             UpdateValidationResult updateValidationResult = issueService.validateUpdate(user, issue.id, issueInputParameters);
-			if (updateValidationResult.isValid())
-			{
+            if (updateValidationResult.isValid())
+            {
                 if (apply) {
-    				IssueResult updateResult = issueService.update(user, updateValidationResult);
-    				if (!updateResult.isValid())
-    				{
-        				sBuf1.append("Y, ")
-    				}
+                    IssueResult updateResult = issueService.update(user, updateValidationResult);
+                    if (!updateResult.isValid())
+                    {
+                        sBuf1.append("Y, ")
+                    }
                 }
-			}
-	    }
+            }
+        }
         logit.info(sBuf1.toString())
         } else {
-    		logit.error("Invalid JQL: " + jqlSearch);
-		}
+            logit.error("Invalid JQL: " + jqlSearch);
+        }
    
     // REPORTER
     jqlSearch = reporterclause1 + oldUser + clause2
     logit.info( "" + jqlSearch)
     SearchService.ParseResult parseResult2 =  searchService.parseQuery(user, jqlSearch)
     if (parseResult.isValid()) {
-   	searchResult = searchService.search(user, parseResult2.getQuery(), PagerFilter.getUnlimitedFilter())
+       searchResult = searchService.search(user, parseResult2.getQuery(), PagerFilter.getUnlimitedFilter())
         //logit.info(searchResult.getResults().size())
         StringBuffer sBuf2 = new StringBuffer()
-    	searchResult.getResults().each { issue ->
+        searchResult.getResults().each { issue ->
         sBuf2.append(issue.getKey() + ", ")
            def issueInputParameters = issueService.newIssueInputParameters()
             issueInputParameters.setSkipScreenCheck(true);
             issueInputParameters.setReporterId(newUser)
             UpdateValidationResult updateValidationResult = issueService.validateUpdate(user, issue.id, issueInputParameters);
-			if (updateValidationResult.isValid())
-			{
+            if (updateValidationResult.isValid())
+            {
                 if (apply) {
-    				IssueResult updateResult = issueService.update(user, updateValidationResult);
-    				if (!updateResult.isValid())
-    				{
-        				sBuf2.append("Y, ")
-    				}
+                    IssueResult updateResult = issueService.update(user, updateValidationResult);
+                    if (!updateResult.isValid())
+                    {
+                        sBuf2.append("Y, ")
+                    }
                 }
-			}
-	    }
+            }
+        }
         logit.info(sBuf2.toString())
         } else {
-    		log.error("Invalid JQL: " + jqlSearch);
-		}
+            log.error("Invalid JQL: " + jqlSearch);
+        }
         
     // move groups
     def groupManager = ComponentAccessor.groupManager
@@ -129,11 +129,11 @@ users.each() {
     def grps = groupManager.getGroupsForUser(oldU)
     grps.each() {
         if (apply) {
-  			if (!it.getName().contains("COMP_") && !it.getName().contains("ORG_") && !it.getName().contains("FnSec_")) {
-				userUtil.removeUserFromGroup(it, oldU)
-	    	   	groupManager.addUserToGroup(newU, it)
-    		    logit.info("moved " + it.name  + " from " + oldU + " to " + newU)       
-    		}    
+              if (!it.getName().contains("COMP_") && !it.getName().contains("ORG_") && !it.getName().contains("FnSec_")) {
+                userUtil.removeUserFromGroup(it, oldU)
+                   groupManager.addUserToGroup(newU, it)
+                logit.info("moved " + it.name  + " from " + oldU + " to " + newU)       
+            }    
         }
         else {
             logit.info("to move " + it.name  + " from " + oldU + " to " + newU)  

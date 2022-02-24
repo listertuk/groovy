@@ -7,7 +7,7 @@ import org.apache.log4j.Logger
 import com.atlassian.jira.bc.user.search.UserSearchParams
 import com.atlassian.jira.bc.user.search.UserSearchService
 
-Logger  logit = Logger.getLogger("com.domain1.eu.logging")
+Logger  logit = Logger.getLogger("com.domain1.logging")
 
 // **********************************************
 String[] userList = [
@@ -17,7 +17,7 @@ String[] userList = [
 import com.atlassian.crowd.embedded.api.CrowdService
 //def logit = Logger.getLogger("com.domain1.eu.logging")
 import com.atlassian.crowd.manager.directory.DirectoryManager
-final directoryToCheck = 'Cheil Worldwide US'
+final directoryToCheck = 'LDAP US'
 final groupName = 'jira-software-users'
 def groupManager = ComponentAccessor.groupManager
 def userManager = ComponentAccessor.userManager
