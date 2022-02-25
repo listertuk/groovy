@@ -129,7 +129,8 @@ users.each() {
     def grps = groupManager.getGroupsForUser(oldU)
     grps.each() {
         if (apply) {
-              if (!it.getName().contains("COMP_") && !it.getName().contains("ORG_") && !it.getName().contains("FnSec_")) {
+              /* groovylint-disable-next-line ImplicitClosureParameter */
+              if (!it.getName().contains("EXCLUDE GROUP") ) {
                 userUtil.removeUserFromGroup(it, oldU)
                    groupManager.addUserToGroup(newU, it)
                 logit.info("moved " + it.name  + " from " + oldU + " to " + newU)       
