@@ -11,37 +11,56 @@ import com.atlassian.jira.bc.JiraServiceContextImpl
 import com.atlassian.jira.sharing.rights.ShareRights
 
 def userManager = ComponentAccessor.getUserManager()
+
 try {
-    def ownerUser = userManager.getUserByName("listertuk-admin")
-    log.warn("LOGGER decomUser " + ownerUser)
-    def user2 = userManager.getUserByName("listertuk-user2")
-    log.warn("LOGGER decomUser " +user2)
+    def ownerUser = userManager.getUserByName('listertuk-admin')
+    log.warn('LOGGER decomUser ' + ownerUser)
+    def user2 = userManager.getUserByName('listertuk-user2')
+    log.warn('LOGGER decomUser ' + user2)
     def loggedInUser = ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser()
-    def groupName = "Group1"
+
+    String groupName = 'Group1'
 
     SearchRequestService searchRequestService = ComponentAccessor.getComponent(SearchRequestService.class)
     SearchRequestManager searchRequestManager = ComponentAccessor.getComponent(SearchRequestManager.class)
     def contextImpl = new JiraServiceContextImpl(ownerUser)
     Collection<SearchRequest> searchRequests = searchRequestManager.getAllOwnedSearchRequests(ownerUser)
-//Collection<SearchRequest> searchRequests = searchRequestService.getOwnedFilters(ownerUser)
-    if(searchRequests.size() > 0) {
+
+    if (searchRequests.size() > 0) {
         searchRequests.each { s ->
             log.warn s
-//set owner
-//s.setOwner(targetUser)
 
+     //set owner
+     //s.setOwner(user2)
             Set<SharePermission> permissionsSet = new HashSet<SharePermission>(
-                s.getPermissions().getPermissionSet()
+              s.getPermissions().getPermissionSet()
             )
-            log.warn permissionsSet
-            permissionsSet.add(new SharePermissionImpl( ShareType.Name.GROUP, "test", ShareRights.VIEW_EDIT.toString()))
+
+            log.warn('start ' + permissionsSet)
+            try {
+                def newPerm = new SharePermissionImpl(ShareType.Name.GROUP, groupName, '', ShareRights.VIEW_EDIT)
+                //log.warn permissionsSet.contains(newPerm)
+                permissionsSet.add(newPerm)
+                permissionsSet.forEach() { perm ->
+                    if (perm.type.toString() == 'loggedin') {
+                        //log.warn('loggedin ' + perm.type.toString() == 'loggedin')
+                        //log.warn('before remove ' + permissionsSet.contains(perm))
+                        permissionsSet.remove(perm)
+                        //log.warn('after remove ' + ' ' + perm + permissionsSet)
+                    }
+                }
+            } catch (Exception e) {
+                log.warn('ERROR1 ' + e.getMessage())
+            }
+            //log.warn('*(*(' + permissionsSet)
+
             s.setPermissions(new SharedEntity.SharePermissions(permissionsSet))
+
             searchRequestManager.update(loggedInUser, s)
         }
-    } else {
-        log.warn "LOGGER  ${ownerUser.getName()} no filters found."
+ } else {
+        log.warn "LOGGER ${ownerUser.getName()} no filters found."
     }
-
-} catch(Exception e) {
-    log.warn e.getMessage()
+} catch (Exception e) {
+    log.warn('ERROR2 '  + e.getMessage())
 }
