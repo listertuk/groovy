@@ -23,7 +23,7 @@ def logit = Logger.getLogger("com.domain1.eu.logging")
 String[] groups = ["jira-software-users"]
 
 
-String ignoreIfInGroup = "Cheil IT UK"
+String ignoreIfInGroup = "IT UK"
 // **********************************************
 def userSearchService = ComponentAccessor.getUserSearchService()
 def  usrService = ComponentAccessor.getComponent(UserService)
