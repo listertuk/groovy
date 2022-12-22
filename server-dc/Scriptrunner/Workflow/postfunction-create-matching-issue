@@ -6,56 +6,54 @@ import com.atlassian.jira.issue.Issue
 import com.atlassian.jira.issue.IssueManager
 import com.atlassian.jira.issue.link.IssueLink
 import com.atlassian.jira.issue.link.IssueLinkManager
+import com.atlassian.jira.issue.CustomFieldManager
+import com.atlassian.jira.issue.fields.CustomField
 
 Logger logit = Logger.getLogger("com.scripts")
 logit.info "@@@ start"
 
-
 ApplicationUser user = ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser()
-
 def issueFactory = ComponentAccessor.issueFactory
-
 IssueLinkManager issueLinkManager = ComponentAccessor.getIssueLinkManager()
-
+CustomFieldManager customFieldManager = ComponentAccessor.getCustomFieldManager()
 IssueManager issueManager = ComponentAccessor.getIssueManager()
 
-
+Collection<CustomField> fields = customFieldManager.getCustomFieldObjectsByName('Variant')
+CustomField variant = fields.first()
+def variantValue = "none"
+if (variant) {
+    variantValue = variant.getValue(issue)
+}
 
 List<IssueLink> outwardLinks = issueLinkManager.getOutwardLinks(issue.id)
 
 outwardLinks.each { IssueLink link -> 
-
- logit.info("@@@ issuelink" + link.destinationObject.getKey())
-
-
-     if (link.destinationObject.summary == issue.summary && link.destinationObject.issueType == issue.issueType)
-     {
-         logit.info("@@@ issuematch" + link.destinationObject.getKey() )
-                
-            //This creates an empty issue
-                def newIssue = issueFactory.issue
-                
-                newIssue.setSummary(issue.summary)
-                newIssue.setDescription("variant")
-                newIssue.setPriority(issue.getPriority())
-                
-    			newIssue.setReporter(issue.reporter)
-                newIssue.setProjectObject(link.destinationObject.getProjectObject())
-                newIssue.assignee = issue.getAssignee()
-                if (issue.dueDate) {
-                    newIssue.setDueDate(issue.dueDate)
-                }
-                
-                newIssue.setIssueTypeId(issue.issueType.getId())
- 
-                
-                Map<String, Object> newIssueParams = ["issue": newIssue] as Map<String, Object>
-                issueManager.createIssueObject(user, newIssueParams)    
-                //issueLinkManager.createIssueLink(issue, newIssue, link.getLinkTypeId(),1,user )
-                logit.info("@@@ created " + newIssue.key)
-                
-     }
+    logit.info("@@@ issuelink" + link.destinationObject.getKey())
 
 
+    if (link.destinationObject.summary == issue.summary && link.destinationObject.issueType == issue.issueType)
+    {
+        logit.info("@@@ issuematch" + link.destinationObject.getKey() )
+        //This creates an empty issue
+        def newIssue = issueFactory.issue
+        
+        newIssue.setSummary(issue.summary)
+        newIssue.setDescription("variant")
+        newIssue.setPriority(issue.getPriority())
+        newIssue.setReporter(issue.reporter)
+        newIssue.setAssignee(issue.assignee)
+        newIssue.setProjectObject(link.destinationObject.getProjectObject())
+        if (issue.dueDate) {
+            newIssue.setDueDate(issue.dueDate)
+        }
+        newIssue.setIssueTypeId(issue.issueType.getId())
+        newIssue.setCustomFieldValue(variant, variantValue)
+               
+        Map<String, Object> newIssueParams = ["issue": newIssue] as Map<String, Object>
+        issueManager.createIssueObject(user, newIssueParams)    
+        logit.info("@@@ created " + newIssue.key)
+        issueLinkManager.createIssueLink(issue.id, newIssue.id, link.getLinkTypeId(), 1, user)
+                
+    }
 }
 
