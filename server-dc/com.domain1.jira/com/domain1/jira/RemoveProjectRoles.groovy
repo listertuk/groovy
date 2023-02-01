@@ -24,7 +24,7 @@ class RemoveProjectRoles {
     Project project
     ProjectRoleService projectRoleService
     Logger logit = Logger.getLogger("com.domain1.eu.logging")
-	Collection<String> actorNames
+    Collection<String> actorNames
 
      public RemoveProjectRoles(Project project) {
         this.project = project
@@ -40,35 +40,35 @@ class RemoveProjectRoles {
         if (errorCollection.hasAnyErrors()) {
             logit.info(errorCollection.getErrors())
         } else {
-        	roles.each() { ProjectRole r ->
-       			ProjectRoleActors actors=   projectRoleService.getProjectRoleActors(r, project, errorCollection)
-            	if (!actors.getRoleActors().empty)
-            	{
-                	actors.getRoleActors().collect().each() { RoleActor ra ->
+            roles.each() { ProjectRole r ->
+                   ProjectRoleActors actors=   projectRoleService.getProjectRoleActors(r, project, errorCollection)
+                if (!actors.getRoleActors().empty)
+                {
+                    actors.getRoleActors().collect().each() { RoleActor ra ->
                     actorNames = new ArrayList<String>()
                     if (ra.getType().contentEquals("atlassian-user-role-actor")) {
-                    	Set<ApplicationUser> users = ra.getUsers()
+                        Set<ApplicationUser> users = ra.getUsers()
                         users.each() {
-                        	actorNames.add(it.name)
+                            actorNames.add(it.name)
                         }
 
                     } else {
-                    	actorNames.add(ra.getDescriptor())
+                        actorNames.add(ra.getDescriptor())
                     }
-               		projectRoleService.removeActorsFromProjectRole(actorNames, r, project, ra.getType().toString(), errorCollection)
-        			if (errorCollection.hasAnyErrors()) {
-            			logit.info(errorCollection.getErrors())
-        				}
-               		}
-            	}
-        	}
+                       projectRoleService.removeActorsFromProjectRole(actorNames, r, project, ra.getType().toString(), errorCollection)
+                    if (errorCollection.hasAnyErrors()) {
+                        logit.info(errorCollection.getErrors())
+                        }
+                       }
+                }
+            }
         } 
     }
     public void addGroupToRole(String group, String role) {
         def errorCollection = new SimpleErrorCollection()
         ProjectRole r = projectRoleService.getProjectRoleByName(role, errorCollection)
         actorNames = new ArrayList<String>()
-		actorNames.add(group)
+        actorNames.add(group)
         projectRoleService.addActorsToProjectRole(actorNames, r, project, "atlassian-group-role-actor", errorCollection)
         if (errorCollection.hasAnyErrors()) {
             logit.info(errorCollection.getErrors())
