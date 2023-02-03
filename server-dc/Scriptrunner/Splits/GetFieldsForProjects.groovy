@@ -12,7 +12,7 @@ import com.atlassian.jira.issue.fields.screen.FieldScreenLayoutItem
 import com.atlassian.jira.issue.fields.FieldManager
 import com.atlassian.jira.issue.fields.CustomField
 
-def issueTypeScreenSchemeManager=ComponentAccessor.getIssueTypeScreenSchemeManager()
+//def issueTypeScreenSchemeManager=ComponentAccessor.getIssueTypeScreenSchemeManager()
 
 def Category log = Category.getInstance("com.onresolve.jira.groovy.PostFunction")
 log.setLevel(org.apache.log4j.Level.DEBUG)
@@ -21,8 +21,8 @@ log.setLevel(org.apache.log4j.Level.DEBUG)
 String [] projectKeys = ['KAN1', 'JSM1', 'NR3']
 ProjectManager pMgr = ComponentAccessor.projectManager 
 def issueTypeScreenScheme = ComponentAccessor.getIssueTypeScreenSchemeManager()
-def wrkflwScheme = ComponentAccessor.getWorkflowSchemeManager()
-def fieldScheme = ComponentAccessor.getFieldLayoutManager()
+//def wrkflwScheme = ComponentAccessor.getWorkflowSchemeManager()
+//def fieldScheme = ComponentAccessor.getFieldLayoutManager()
 FieldManager fieldMgr = ComponentAccessor.fieldManager
 
 log.info("Project Name,Field Id, Field Name ")
